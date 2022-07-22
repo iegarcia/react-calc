@@ -9,12 +9,10 @@ import Result from "./components/Result";
 import "./App.css";
 
 const App = () => {
-  console.log("Renderizado APP");
+  const state = useState("");
+  const [stack, setStack] = state;
 
-  const state = useState(""); // Funcion de React que permite manipular acceder al ciclo de vida del componente y manipular su estado
-  const [stack, setStack] = state; // Array Destructuring: useState retorna un estado y una funcion que modificara ese estado
-
-  const items = words(stack, /[^-^+^*^/]+/g); // Funcion proveniente del paquete lodash, esta separa los elementos en base a un patron, en este caso el regex que busca los simbolos matematicos
+  const items = words(stack, /[^-^+^*^/]+/g);
 
   const value = items.length > 0 ? items[items.length - 1] : "0";
 
@@ -22,34 +20,19 @@ const App = () => {
     <main className="react-calculator">
       <Result value={value} />
 
-      <Numbers
-        onClickNumber={(number) => {
-          console.log("Click in number", number);
-          setStack(`${stack}${number}`);
-        }}
-      />
+      <Numbers onClickNumber={(number) => setStack(`${stack}${number}`)} />
       <Functions
-        onContentClear={() => {
-          console.log("Content Clear");
-          setStack("");
-        }}
+        onContentClear={() => setStack("")}
         onDelete={() => {
           if (stack.length > 0) {
-            console.log("onDelete");
             const newStack = stack.substring(0, stack.length - 1);
             setStack(newStack);
           }
         }}
       />
       <MathOperations
-        onClickOperation={(operation) => {
-          console.log("Operation", operation);
-          setStack(`${stack}${operation}`);
-        }}
-        onClickEqual={(equal) => {
-          console.log("Equal", equal);
-          setStack(eval(stack).toString());
-        }}
+        onClickOperation={(operation) => setStack(`${stack}${operation}`)}
+        onClickEqual={() => setStack(eval(stack).toString())}
       />
     </main>
   );
